@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'common',
     'users',
     'authentication',
+    'tasks',
+    'projects',
 ]
 
 MIDDLEWARE = [
