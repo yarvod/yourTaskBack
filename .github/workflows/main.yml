@@ -36,7 +36,7 @@ jobs:
             if [[ $file == backend/* ]] || [[ $file == .github/* ]] || [[ $file == docker-compose.* ]]; then
               echo "backend=true" >> $GITHUB_OUTPUT
             fi
-            if [[ $file == frontend/* ]] || [[ $file == .github/* ]] || [[ $file == docker-compose.* ]]; then
+            if [[ $file == nginx/* ]] || [[ $file == .github/* ]] || [[ $file == docker-compose.* ]]; then
               echo "nginx=true" >> $GITHUB_OUTPUT
             fi
             if [[ $file == redis/* ]] || [[ $file == .github/* ]] || [[ $file == docker-compose.* ]]; then
@@ -72,9 +72,9 @@ jobs:
           echo "backend_rebuilt=true" >> $GITHUB_OUTPUT
 
       - if: needs.check.outputs.nginx == 'true'
-        name: Frontend -- build and push
+        name: Nginx -- build and push
         run: |
-          docker build frontend/ -t ghcr.io/yarvod/your-task-back/your-task-back-nginx:latest
+          docker build nginx/ -t ghcr.io/yarvod/your-task-back/your-task-back-nginx:latest
           docker push ghcr.io/yarvod/your-task-back/your-task-back-nginx:latest
 
       - if: needs.check.outputs.redis == 'true'
