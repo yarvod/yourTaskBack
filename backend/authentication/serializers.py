@@ -83,7 +83,7 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'employee', 'employer')
+        fields = ('email', 'password', 'password2', 'first_name', 'last_name')
 
     email = serializers.EmailField(
         required=True,
@@ -93,18 +93,12 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
-    employee = serializers.BooleanField(default=False)
-    employer = serializers.BooleanField(default=False)
-
     first_name = serializers.CharField()
     last_name = serializers.CharField()
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
-
-        if all((attrs.get('employee'), attrs.get('employer'))):
-            raise serializers.ValidationError({"employee&employer": "Can't be together."})
 
         return attrs
 
@@ -114,8 +108,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', ''),
-            employee=validated_data.get('employee', None),
-            employer=validated_data.get('employer', None),
             is_active=False
         )
 

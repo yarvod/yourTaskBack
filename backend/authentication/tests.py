@@ -203,31 +203,6 @@ class RegisterUser(APITestCase):
         self.assertEqual(user.is_active, True)
 
     @mock.patch('authentication.tasks.send_activation_email')
-    def test_register_employee_employer(self, send_activation_email_mock):
-        self.data.update(**dict(employee=True, employer=True))
-        resp = self.client.post(self.register_url, data=self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
-        send_activation_email_mock.assert_not_called()
-
-    @mock.patch('authentication.tasks.send_activation_email')
-    def test_register_employee(self, send_activation_email_mock):
-        self.data.update(**dict(employee=True))
-        resp = self.client.post(self.register_url, data=self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        send_activation_email_mock.apply_async.assert_called_once_with(kwargs=dict(to_email=self.data['email']))
-
-    @mock.patch('authentication.tasks.send_activation_email')
-    def test_register_employer(self, send_activation_email_mock):
-        self.data.update(**dict(employer=True))
-        resp = self.client.post(self.register_url, data=self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        send_activation_email_mock.apply_async.assert_called_once_with(kwargs=dict(to_email=self.data['email']))
-
-        self.data.update(email='newuser2@phystech-job.ru', employer=dict(company_website='c1'))
-        resp = self.client.post(self.register_url, data=self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
-
-    @mock.patch('authentication.tasks.send_activation_email')
     def test_resend_activation(self, send_activation_email_mock):
         resp = self.client.post(self.register_url, data=self.data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
