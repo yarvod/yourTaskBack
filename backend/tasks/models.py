@@ -45,7 +45,7 @@ class Task(models.Model):
         return self.title
 
 
-class TaskComment:
+class TaskComment(models.Model):
     task = models.ForeignKey(to='Task', on_delete=models.CASCADE, verbose_name='Задача', related_name='comments')
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Пользователь')
     text = models.TextField(verbose_name='Комментарий')
